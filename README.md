@@ -34,12 +34,12 @@ Priority (6 bits, 0-63):
 * Streams at a higher priority are delivered in their entirety before streams at a lower priority.
 * Streams at the same priority level are delivered as defined by their concurrency.
 
-Concurrency (2 bits, 0-4):
+Concurrency (2 bits, 0-3):
 
-0. Default (unspecified)
-1. "Exclusive Sequential" : Streams with a concurrency of 1 are delivered first at a given priority level and without sharing bandwidth with any other streams. This is optimal for things like blocking scripts and CSS.
-2. "Shared Sequential" : Streams with a concurrency of 2 are grouped together and delivered sequentially within the group. The group as a whole splits bandwidth evenly with the streams with concurrency 3 (50% to the one stream at a time in the concurrency 2 group and 50% to the 3-concurrency group as a whole). This is optimal for things like async or deferred scripts where you may want to load them quickly but not exclusively and where they are optimally delivered completely and in order.
-3. "Shared" : Streams with a concurrency of 3 are grouped together in a single group. The allocated bandwidth for the group is split evenly across all streams in the group.
+* **3**: "Exclusive Sequential" : Streams with a concurrency of 3 are delivered first at a given priority level and without sharing bandwidth with any other streams. This is optimal for things like blocking scripts and CSS.
+* **2**: "Shared Sequential" : Streams with a concurrency of 2 are grouped together and delivered sequentially within the group. The group as a whole splits bandwidth evenly with the streams with concurrency 1 (50% to the one stream at a time in the concurrency 2 group and 50% to the 1-concurrency group as a whole). This is optimal for things like async or deferred scripts where you may want to load them quickly but not exclusively and where they are optimally delivered completely and in order.
+* **1**: "Shared" : Streams with a concurrency of 1 are grouped together in a single group. The allocated bandwidth for the group is split evenly across all streams in the group.
+* **0**: Default (unspecified)
 
 When the priority and concurrency are both set to zero, it should be assumed that prioritization is not specified and default prioritization should be applied (TBD - likely priority 0 with concurrency 3).
 
