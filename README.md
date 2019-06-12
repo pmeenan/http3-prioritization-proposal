@@ -50,10 +50,10 @@ Bandwidth splitting is done at a frame-by-frame level where the next frame to be
 
 * Only consider responses where data is available to be sent.
 * Select from the responses with the highest priority level.
-* If "Concurrency 1" responses are available, fill the frame with the "Concurrency 1" response with the lowest stream ID.
-* Otherwise, round robin between the "Concurrency 2" and "Concurrency 3" groups, picking one frame from each group.
+* If "Concurrency 3" responses are available, fill the frame with the "Concurrency 3" response with the lowest stream ID.
+* Otherwise, round robin between the "Concurrency 2" and "Concurrency 1" groups, picking one frame from each group.
 * Within the "Concurrency 2" group, fill the frame with the response with the lowest stream ID.
-* Within the "Concurrency 3" group, round robin across all of the available responses.
+* Within the "Concurrency 1" group, round robin across all of the available responses.
 
 ### Example Browser Prioritization
 
