@@ -46,13 +46,12 @@ When the priority and concurrency are both set to zero, it should be assumed tha
 ![Priority Levels and Concurrency](images/priorities.png)
 
 ### Bandwidth Splitting
-Bandwidth splitting is done at a frame-by-frame level where the next frame to be sent is evaluated as every frame of data is being prepared to be sent (assuming the data streams are chunked into frames on the server side for processing):
+Bandwidth splitting is implementation-specific. One possible implementation is when the server makes a decision on a frame-by-frame basis:
 
 * Only consider responses where data is available to be sent.
 * Select from the responses with the highest priority level.
-* If "Concurrency 3" responses are available, fill the frame with the "Concurrency 3" response with the lowest stream ID.
-* Otherwise, round robin between the "Concurrency 2" and "Concurrency 1" groups, picking one frame from each group.
-* Within the "Concurrency 2" group, fill the frame with the response with the lowest stream ID.
+* Round robin between the "Concurrency 0" and "Concurrency 1" groups, picking one frame from each group.
+* Within the "Concurrency 0" group, fill the frame with the response with the lowest stream ID.
 * Within the "Concurrency 1" group, round robin across all of the available responses.
 
 ### Example Browser Prioritization
