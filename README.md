@@ -24,24 +24,27 @@ The prioritization will be packed into a single byte (with no other stream ID's 
  0               
  0 1 2 3 4 5 6 7 
 +-+-+-+-+-+-+-+-+
-| Priority  | C |
+|  Priority   |C|
 +-+-+-+-+-+-+-+-+
 ```
 
 In all cases, prioritization of stream delivery is based on what streams have data available to send.
 
-Priority (6 bits, 0-63): 
+### Priority (7 bits, 0-127): 
+
 * Streams at a higher priority are delivered in their entirety before streams at a lower priority.
 * Streams at the same priority level are delivered as defined by their concurrency.
 
-Concurrency (2 bits, 0-3):
+A minimum of 4 bits is needed for current use cases for prioritization so it's possible to use up to 3 of the prioritization bits for another use if needed.
 
-* **3**: "Exclusive Sequential" : Streams with a concurrency of 3 are delivered first at a given priority level and without sharing bandwidth with any other streams. This is optimal for things like blocking scripts and CSS.
-* **2**: "Shared Sequential" : Streams with a concurrency of 2 are grouped together and delivered sequentially within the group. The group as a whole splits bandwidth evenly with the streams with concurrency 1 (50% to the one stream at a time in the concurrency 2 group and 50% to the 1-concurrency group as a whole). This is optimal for things like async or deferred scripts where you may want to load them quickly but not exclusively and where they are optimally delivered completely and in order.
-* **1**: "Shared" : Streams with a concurrency of 1 are grouped together in a single group. The allocated bandwidth for the group is split evenly across all streams in the group.
-* **0**: Default (unspecified)
+### Concurrency (1 bit):
 
-When the priority and concurrency are both set to zero, it should be assumed that prioritization is not specified and default prioritization should be applied (TBD - likely priority 0 with concurrency 3).
+At a given priority, all requests are grouped based on their concurrency. The overall available bandwidth is split evenly between the two groups and then allocated within each group:
+
+* **0**: "Sequential" : Streams with a concurrency of 0 are delivered sequentially within the group. This is optimal for things like async or deferred scripts where you may want to load them quickly but not exclusively and where they are optimally delivered completely and in order.
+* **1**: "Concurrent" : Streams with a concurrency of 1 share bandwidth across all streams in the group.
+
+Exclusive resource delivery with no bandwidth sharing can be achieved by using a higher priority and setting the concurrency to 0 (with no resources at the same priority level using a concurrency of 1).
 
 ![Priority Levels and Concurrency](images/priorities.png)
 
