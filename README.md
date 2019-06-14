@@ -35,7 +35,7 @@ In all cases, prioritization of stream delivery is based on what streams have da
 * Streams at a higher priority are delivered in their entirety before streams at a lower priority.
 * Streams at the same priority level are delivered as defined by their concurrency.
 
-A minimum of 4 bits is needed for current use cases for prioritization so it's possible to use up to 3 of the prioritization bits for another use if needed.
+Implementations may not be able to use the full bit space and should drop the least significant bits when mapping from the 7-bit space to their implementation's priority levels. It is also possible to negotiate other uses for the space, such as using the 4 most significant bits for priority and the 3 least significant bits for defining groups.
 
 ### Concurrency (1 bit):
 
